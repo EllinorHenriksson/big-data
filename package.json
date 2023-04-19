@@ -18,6 +18,7 @@
     "@types/http-errors": "^2.0.1",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
+    "@types/node-fetch": "^2.6.3",
     "dotenv": "^16.0.3",
     "nodemon": "^2.0.22",
     "rimraf": "^5.0.0",
