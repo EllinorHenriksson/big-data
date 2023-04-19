@@ -4,7 +4,7 @@
   "description": "1DV027 - WT2 - Big Data",
   "main": "src/server.ts",
   "scripts": {
-    "start:dev": "npx nodemon",
+    "dev": "npx nodemon",
     "build": "rimraf ./build && tsc",
     "start": "node build/server.js"
   },
@@ -17,6 +17,7 @@
     "@types/http-errors": "^2.0.1",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
+    "dotenv": "^16.0.3",
     "nodemon": "^2.0.22",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.1",
