@@ -1,12 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express'
 import expressLayouts from 'express-ejs-layouts'
-import helmet from 'helmet'
 import logger from 'morgan'
 import { HttpError } from 'http-errors'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { router } from './routes/router.js'
 import { container } from './config/bootstrap.js'
+
+import helmet from 'helmet';
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 try {
   const app = express()
