@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
 import createError from 'http-errors'
-import { Controller } from '../controllers/controller'
+import { Controller } from '../controllers/Controller'
 
 export const router = express.Router()
 
