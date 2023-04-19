@@ -5,10 +5,18 @@
 import { IoCContainer } from '../util/IoCContainer.js'
 import { Service } from '../services/Service.js'
 import { Controller } from '../controllers/Controller.js'
+import { Repository } from '../repositories/Repository.js'
 
 const iocContainer = new IoCContainer()
 
+iocContainer.register('RepositorySingleton', Repository, {
+  singleton: true
+})
+
 iocContainer.register('ServiceSingleton', Service, {
+  dependencies: [
+    'RepositorySingleton'
+  ],
   singleton: true
 })
 

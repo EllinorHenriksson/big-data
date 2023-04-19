@@ -1,46 +1,52 @@
-import fetch from "node-fetch"
+import { Client } from '@elastic/elasticsearch'
 
 export class Repository {
-  async getData (): Promise<unknown> {
-    const credentials = `${process.env.USERNAME}:${process.env.PASSWORD}`
-    const bufferObj = Buffer.from(credentials, "utf8"); 
-    const base64String = bufferObj.toString("base64");
+  /**
+   * @throws {Error} If fetch fails
+   */
+  async getData (): Promise<any> {
+    try {
+      const client = new Client({
+        node: process.env.BASE_URL_ELASTIC,
+        auth: {
+          username: process.env.USERNAME as string,
+          password: process.env.PASSWORD as string
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      })
 
-    const data = {
-      "aggs": {
-          "life_expectancy_over_time": {
-              "date_histogram": {
-                  "field": "@timestamp",
-                  "calendar_interval": "1y",
-                  "format": "yyyy-MM-dd"
-              },
-              "aggs": {
-                  "regions": {
-                      "terms": {
-                          "field": "Region"
-                      },
-                      "aggs": {
-                          "avg_life_expectancy": {
-                              "avg": {
-                                  "field": "Life_expectancy"
-                              }
-                          }
-                      }
+      const result = await client.search({
+        index: 'life_expectancy',
+        aggs: {
+          'life_expectancy_over_time': {
+            'date_histogram': {
+              field: '@timestamp',
+              calendar_interval: '1Y',
+              format: 'yyyy-MM-dd'
+            },
+            aggs: {
+              regions: {
+                terms: {
+                    field: 'Region'
+                },
+                aggs: {
+                  'avg_life_expectancy': {
+                    avg: {
+                      field: 'Life_expectancy'
+                    }
                   }
+                }
               }
+            }
           }
-      }
-  }
-  
-    const response = await fetch(`${process.env.BASE_URL_ELASTIC}life_expectancy/_search?size=0`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${base64String}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
+        }
+      })
 
-    return response.json() as unknown
+      console.log('Result: ', result);
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   }
 }
