@@ -8,13 +8,16 @@ export class Controller {
 
   async index (req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.getData()
+      //const data = await this.service.getData()
+      const data = 'Hello'
 
       console.log(data);
+
+      const viewData = {
+        data
+      }
       
-      // Use js lib to render graph
-  
-      res.render('index')
+      res.render('index', { viewData })
     } catch (error) {
       next(createError(500))
     }

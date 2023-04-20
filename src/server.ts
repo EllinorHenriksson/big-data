@@ -26,8 +26,7 @@ try {
   app.use(helmet.contentSecurityPolicy({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      'script-src': ["'self'"],
-      'img-src': ['gitlab.lnu.se', '*.gravatar.com']
+      'script-src': ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
     }
   }))
 
