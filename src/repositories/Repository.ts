@@ -1,52 +1,52 @@
-import { Client } from '@elastic/elasticsearch'
+import { Client, errors } from '@elastic/elasticsearch'
 
 export class Repository {
+  private client: Client
+
+  constructor () {
+    this.client = new Client({
+      node: process.env.BASE_URL_ELASTIC,
+      auth: {
+        username: process.env.USERNAME_ELASTIC as string,
+        password: process.env.PASSWORD_ELASTIC as string
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    })
+  }
+
   /**
-   * @throws {Error} If fetch fails
+   * @throws {errors.ElasticsearchClientError} If call to Elasticsearch server fails.
    */
   async getData (): Promise<any> {
-    try {
-      const client = new Client({
-        node: process.env.BASE_URL_ELASTIC,
-        auth: {
-          username: process.env.USERNAME as string,
-          password: process.env.PASSWORD as string
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      })
-
-      const result = await client.search({
-        index: 'life_expectancy',
-        aggs: {
-          'life_expectancy_over_time': {
-            'date_histogram': {
-              field: '@timestamp',
-              calendar_interval: '1Y',
-              format: 'yyyy-MM-dd'
-            },
-            aggs: {
-              regions: {
-                terms: {
-                    field: 'Region'
-                },
-                aggs: {
-                  'avg_life_expectancy': {
-                    avg: {
-                      field: 'Life_expectancy'
-                    }
+    const result = await this.client.search({
+      index: 'life_expectancy',
+      aggs: {
+        'life_expectancy_over_time': {
+          'date_histogram': {
+            field: '@timestamp',
+            calendar_interval: 'year',
+            format: 'yyyy-MM-dd'
+          },
+          aggs: {
+            regions: {
+              terms: {
+                  field: 'Region'
+              },
+              aggs: {
+                'avg_life_expectancy': {
+                  avg: {
+                    field: 'Life_expectancy'
                   }
                 }
               }
             }
           }
         }
-      })
+      }
+    })
 
-      console.log('Result: ', result);
-    } catch (error) {
-      console.log('Error: ', error);
-    }
+    return result
   }
 }
