@@ -8,14 +8,9 @@ export class Controller {
 
   async index (req: Request, res: Response, next: NextFunction) {
     try {
-      //const data = await this.service.getData()
-      const data = 'Hello'
+      const data = await this.service.getData()
 
-      console.log(data);
-
-      const viewData = {
-        data
-      }
+      const viewData = { data }
       
       res.render('index', { viewData })
     } catch (error) {

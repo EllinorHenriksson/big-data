@@ -4,7 +4,16 @@ export class Service {
   constructor (private repository: Repository = new Repository()) {}
 
   async getData (): Promise<unknown> {
-    // TODO: Gör om datan så att den enkelt kan omvandlas till en graf i controllern
-    return this.repository.getData()
+    const data: any = await this.repository.getData()
+    const buckets: any[] = data.aggregations['life_expectancy_over_time'].buckets
+    const returnData = buckets.map(bucket => ({
+      year: new Date(bucket['key']).getFullYear(),
+      regions: bucket.regions.buckets.map((regionBucket: any) => ({
+        name: regionBucket.key,
+        avg_life_expectancy: regionBucket['avg_life_expectancy'].value
+      }))
+    }))
+
+    return returnData
   }
 }
