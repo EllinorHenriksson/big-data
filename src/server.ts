@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 import { router } from './routes/router.js'
 import { container } from './config/bootstrap.js'
 
-import helmet from 'helmet';
+import helmet from 'helmet'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -26,7 +26,7 @@ try {
   app.use(helmet.contentSecurityPolicy({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      'script-src': ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net']
     }
   }))
 
@@ -56,6 +56,7 @@ try {
   app.use('/', router)
 
   // Error handler.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use(function (err: HttpError, req: Request, res: Response, next: NextFunction) {
     if (err.status === 404) {
       return res

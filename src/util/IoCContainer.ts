@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type Options = { dependencies?: string[], singleton?: boolean, type?: boolean }
 type Service = { definition: any, dependencies: string[], singleton: boolean, type: boolean }
 
@@ -32,16 +33,16 @@ export class IoCContainer {
    *
    * @param {string} name - ...
    * @param {*} definition - ...
-   * @param {Options} options
+   * @param {Options} options .
    */
   register (name: string, definition: any, options?: Options) {
-    let dependencies: string[] = []
-    let singleton = false
-    let type = false
-
+    const dependencies: string[] = []
+    const singleton = false
+    const type = false
 
     if (options) {
-      let { dependencies, singleton, type } = options
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      const { dependencies, singleton, type } = options
     }
 
     this.services.set(
@@ -90,6 +91,7 @@ export class IoCContainer {
    */
   private createInstance (service: Service): object {
     const args = service.dependencies?.map((dependency) => this.resolve(dependency)) || []
+    // eslint-disable-next-line new-cap
     return new service.definition(...args)
   }
 }

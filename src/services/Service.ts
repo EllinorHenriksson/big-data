@@ -1,16 +1,41 @@
-import { Repository } from "../repositories/Repository.js";
+import { Repository } from '../repositories/Repository.js'
+import { errors } from '@elastic/elasticsearch'
 
+/**
+ *
+ */
 export class Service {
-  constructor (private repository: Repository = new Repository()) {}
+  /**
+   * The repository.
+   *
+   * @type {Repository}
+   */
+  private repository: Repository
 
-  async getData (): Promise<unknown> {
-    const data: any = await this.repository.getData()
-    const buckets: any[] = data.aggregations['life_expectancy_over_time'].buckets
-    const returnData = buckets.map(bucket => ({
-      year: new Date(bucket['key']).getFullYear(),
+  /**
+   * Initializing constructor.
+   *
+   * @param {Repository} repository The repository.
+   */
+  constructor (repository: Repository) {
+    this.repository = repository
+  }
+
+  /**
+   * Gets the life expectancy data from Elasticsearch.
+   *
+   * @returns {Promise<Array<object>>} A promise that resolves into an array of objects representing the data.
+   * @throws {errors.ElasticsearchClientError} If call to Elasticsearch server fails.
+   */
+  async getData (): Promise<Array<object>> {
+    const data = await this.repository.getData()
+    const buckets = data.aggregations.life_expectancy_over_time.buckets
+    const returnData = buckets.map((bucket: { key: string | number | Date; regions: { buckets: unknown[] } }) => ({
+      year: new Date(bucket.key).getFullYear(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       regions: bucket.regions.buckets.map((regionBucket: any) => ({
         name: regionBucket.key,
-        avg_life_expectancy: regionBucket['avg_life_expectancy'].value
+        avg_life_expectancy: regionBucket.avg_life_expectancy.value
       }))
     }))
 
