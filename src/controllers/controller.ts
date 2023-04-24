@@ -18,7 +18,7 @@ export class Controller {
    *
    * @param {Service} service The service.
    */
-  constructor (service: Service) {
+  constructor (service: Service = new Service()) {
     this.service = service
   }
 

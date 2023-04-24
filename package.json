@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "1DV027 - WT2 - Big Data",
   "type": "module",
-  "main": "src/server.ts",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "npx nodemon",
-    "build": "rimraf ./build && tsc",
-    "start": "node build/server.js",
+    "build": "rimraf ./dist && tsc && copyfiles -u 1 src/views/** src/public/** dist",
+    "start": "node dist/server.js",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix"
   },
@@ -24,6 +24,7 @@
     "@types/node-fetch": "^2.6.3",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.0.3",
     "eslint": "^8.38.0",
     "nodemon": "^2.0.22",

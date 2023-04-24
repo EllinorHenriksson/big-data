@@ -43,7 +43,7 @@ try {
   app.use(express.urlencoded({ extended: false }))
 
   // Serve static files.
-  app.use(express.static(join(directoryFullName, '..', 'public')))
+  app.use(express.static(join(directoryFullName, 'public')))
 
   // Middleware to be executed before the routes.
   app.use((req, res, next) => {

@@ -17,7 +17,7 @@ export class Service {
    *
    * @param {Repository} repository The repository.
    */
-  constructor (repository: Repository) {
+  constructor (repository: Repository = new Repository()) {
     this.repository = repository
   }
 
