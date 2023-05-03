@@ -1,0 +1,49 @@
+<div style="width: 800px;"><canvas id="life-expectancy"></canvas></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+
+<script>
+  const canvas = document.getElementById('life-expectancy')
+
+  const data = <%- JSON.stringify(viewData.data) %>
+
+  const options = {
+    type: 'line',
+    data: {
+      labels: data.map(x => x.year),
+      datasets: data[0].regions.map(x => ({
+        label: x.name,
+        data: data.map(y => {
+          const region = y.regions.find(y => y.name === x.name)
+          return region['avg_life_expectancy']
+        })
+      })) 
+    },
+    options: {
+      plugins: {
+        title: {
+            display: true,
+            text: 'Life expectancy over time'
+        },
+        legend: {
+          position: 'right'
+        }
+      },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'Average life expectancy'
+          },
+          ticks: {
+            callback: function(value, index, ticks) {
+                return value + 'yr';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  new Chart(canvas, options);
+</script>
