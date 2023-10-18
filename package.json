@@ -12,7 +12,7 @@
     "lint:fix": "npx eslint . --fix"
   },
   "keywords": [],
-  "author": "Ellinor Henriksson",
+  "author": "Ellinor Henriksson <eh224kr@student.lnu.se>",
   "license": "ISC",
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.7",
